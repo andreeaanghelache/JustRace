@@ -10,6 +10,7 @@
 
 #import "SocialViewController.h"
 #import <Parse/Parse.h>
+#import <FacebookSDK/FacebookSDK.h>
 
 @implementation SocialAppDelegate
 
@@ -17,10 +18,12 @@
 {
     [Parse setApplicationId:@"Q3ybuwHrHMwSAd8u1CQC0b0iRiF0D8WEZ0vERoiI"
                   clientKey:@"AeZKQ91NUnFcHnuzBIiySoOf0s1MiQlUrdR7ZbY7"];
+    [PFFacebookUtils initializeWithApplicationId:@"371635172951534"];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.viewController = [[SocialViewController alloc] initWithNibName:@"SocialViewController" bundle:nil];
-    self.window.rootViewController = self.viewController;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.viewController];
+    self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -45,11 +48,19 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+      [FBSession.activeSession handleDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [FBSession.activeSession close];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [PFFacebookUtils handleOpenURL:url];
 }
 
 @end

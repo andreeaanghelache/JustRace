@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SocialViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
 
 @end
